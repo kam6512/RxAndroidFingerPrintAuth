@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    compileOptions {
+        encoding = 'UTF-8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.orca.kam.rxandroidfingerprintauth"
+        minSdkVersion 23
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField('String', 'UNKNOWN', '"UNKNOWN"');
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+dependencies {
+    def ext = rootProject.ext;
+    Map<String, String> BasicDependencies = ext.BasicDependencies;
+    Map<String, String> TestDependencies = ext.TestDependencies;
+    Map<String, String> GoogleDependencies = ext.GoogleDependencies;
+    Map<String, String> RxDependencies = ext.RxDependencies;
+
+    compile BasicDependencies.FileTree
+    testCompile TestDependencies.JUnit
+
+    compile GoogleDependencies.Google_SupportV4
+    compile GoogleDependencies.Google_AppCompatV7
+    compile GoogleDependencies.Google_Annotations
+    compile GoogleDependencies.Google_Design
+
+    compile GoogleDependencies.Guava
+
+    compile RxDependencies.RxJava
+    compile RxDependencies.RxAndroid
+}
+repositories {
+    maven { url "https://jitpack.io" }
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        Map<String, String> ClassPaths = rootProject.ext.ClassPaths;
+        classpath ClassPaths.Gradle
+        classpath ClassPaths.Hugo
+        classpath ClassPaths.Retrolambda
+        classpath ClassPaths.APT
+    }
+}
